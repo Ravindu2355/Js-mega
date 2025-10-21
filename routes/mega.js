@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { File } = require('megajs');
-const { collectFiles, collectFiles, MAX_DOWNLOAD_BYTES } = require('../utils/megaHelpers');
+const { collectFiles, collectVideoFiles, MAX_DOWNLOAD_BYTES } = require('../utils/megaHelpers');
 //home...
 router.get('/', (req, res) => {
   res.send('Hello World — MEGA extractor is alive');
