@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const { File } = require('megajs');
-const { collectFiles, MAX_DOWNLOAD_BYTES } = require('../utils/megaHelpers');
-
+const { collectFiles, collectFiles, MAX_DOWNLOAD_BYTES } = require('../utils/megaHelpers');
+//home...
 router.get('/', (req, res) => {
   res.send('Hello World — MEGA extractor is alive');
 });
 
+//mega url...
 router.post('/mega', async (req, res) => {
   const { url } = req.body;
   if (!url) return res.status(400).json({ error: 'missing url in body' });
@@ -23,6 +24,24 @@ router.post('/mega', async (req, res) => {
   }
 });
 
+//return only videos....
+router.post('/megav', async (req, res) => {
+  const { url } = req.body;
+  if (!url) return res.status(400).json({ error: 'missing url in body' });
+
+  try {
+    const root = File.fromURL(url);
+    await root.loadAttributes();
+    const result = [];
+    await collectVideoFiles(root, result);
+    return res.json({ files: result });
+  } catch (err) {
+    console.error('Error extracting MEGA url', err);
+    return res.status(500).json({ error: 'failed to parse MEGA url', detail: String(err) });
+  }
+});
+
+//return first attributes...
 router.post('/megaat', async (req, res) => {
   const { url } = req.body;
   if (!url) return res.status(400).json({ error: 'missing url in body' });
