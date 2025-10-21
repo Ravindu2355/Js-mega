@@ -23,6 +23,22 @@ router.post('/mega', async (req, res) => {
   }
 });
 
+router.post('/megaat', async (req, res) => {
+  const { url } = req.body;
+  if (!url) return res.status(400).json({ error: 'missing url in body' });
+
+  try {
+    const root = File.fromURL(url);
+    await root.loadAttributes();
+    //const result = [];
+    //await collectFiles(root, result);
+    return res.json({ files: root });
+  } catch (err) {
+    console.error('Error extracting MEGA url', err);
+    return res.status(500).json({ error: 'failed to parse MEGA url', detail: String(err) });
+  }
+});
+
 router.post('/megadec', async (req, res) => {
   const { id, key, name } = req.body;
   if (!id || !key) return res.status(400).json({ error: 'missing id or key' });
