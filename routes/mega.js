@@ -51,7 +51,7 @@ router.post('/megaat', async (req, res) => {
     await root.loadAttributes();
     //const result = [];
     //await collectFiles(root, result);
-    return res.json({ files: root });
+    return res.json({ files: megaNodeToJson(root)});
   } catch (err) {
     console.error('Error extracting MEGA url', err);
     return res.status(500).json({ error: 'failed to parse MEGA url', detail: String(err) });
