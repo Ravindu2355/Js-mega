@@ -30,6 +30,40 @@ function isVideoFile(name) {
   return VIDEO_EXTENSIONS.some(ext => lower.endsWith(ext));
 }
 
+//circular to json AI 
+/**
+ * Safely convert MEGA _File/folder node to JSON (avoiding circular refs)
+ * Only includes: id, key, name, size, directory flag, and children array
+ */
+function megaNodeToJson(node) {
+  // Get basic info
+  const id = node.downloadId || node.nodeId || node.publicId || null;
+  const keyBuf = node.key || node._key || null;
+  const key = keyBuf ? Buffer.from(keyBuf).toString('base64') : null;
+
+  const json = {
+    id,
+    key,
+    name: node.name || null,
+    size: node.size || null,
+    directory: !!node.directory,
+  };
+
+  // If directory, recursively map children
+  if (node.directory && Array.isArray(node.children) && node.children.length) {
+    json.children = node.children.map(child => megaNodeToJson(child));
+  }
+
+  return json;
+}
+
+/**
+ * Example usage:
+ * const rootJson = megaNodeToJson(rootNode);
+ * res.json(rootJson);
+ * By AI Chat GPT
+ */
+
 // Recursively collect only video files from a MEGA node
 async function collectVideoFiles(node, out = []) {
   // Load attributes if directory or file has no size/name
@@ -57,4 +91,4 @@ async function collectVideoFiles(node, out = []) {
   return out;
 }
 
-module.exports = { collectFiles, collectVideoFiles, MAX_DOWNLOAD_BYTES };
+module.exports = { collectFiles, collectVideoFiles, megaNodeToJson, MAX_DOWNLOAD_BYTES };
