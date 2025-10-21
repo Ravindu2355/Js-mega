@@ -66,7 +66,7 @@ router.post('/megadecurl', async (req, res) => {
 
   try {
     //const keyBuf = Buffer.from(key, 'base64');
-    const node = new File.fromURL(url); //new File({ downloadId: id, key: keyBuf });
+    const node = File.fromURL(url); //new File({ downloadId: id, key: keyBuf });
     await node.loadAttributes();
 
     if ((node.size || 0) > MAX_DOWNLOAD_BYTES) {
