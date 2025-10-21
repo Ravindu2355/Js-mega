@@ -62,7 +62,7 @@ router.post('/megaat', async (req, res) => {
 
 router.post('/megadecurl', async (req, res) => {
   const { url } = req.body;
-  if (!id || !key) return res.status(400).json({ error: 'missing id or key' });
+  if (!url) return res.status(400).json({ error: 'missing id or key' });
 
   try {
     //const keyBuf = Buffer.from(key, 'base64');
