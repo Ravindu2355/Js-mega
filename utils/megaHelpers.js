@@ -38,8 +38,8 @@ function isVideoFile(name) {
 function megaNodeToJson(node) {
   // Get basic info
   const id = node.downloadId || node.nodeId || node.publicId || null;
-  const keyBuf = node.key || node._key || null;
-  const key = keyBuf ? Buffer.from(keyBuf).toString('base64') : null;
+  const key = node.key || node._key || null;
+  //const key = keyBuf ? Buffer.from(keyBuf).toString('base64') : null;
 
   const json = {
     id,
